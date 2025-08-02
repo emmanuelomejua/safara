@@ -1,11 +1,14 @@
-import './App.css'
+import Navbar from "./components/Navbar"
+import Home from "./pages/Home"
+
 
 function App() {
 
 
   return (
-    <main className="">
-      <p className='bg-red-50 text-5xl'>Thus is shit man</p>
+    <main className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+      <Navbar/>
+      <Home/>
     </main>
   )
 }
