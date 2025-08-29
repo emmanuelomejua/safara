@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Image from './ui/Image';
 
 const Navbar = () => {
 
@@ -8,7 +9,7 @@ const Navbar = () => {
     <div className='flex w-full h-15 md:h-20 items-center justify-between'>
       {/* Logo */}
       <div className="flex items-center gap-2">
-        <img src="/logo.png" alt="" className="w-8 h-8" />
+        <Image src="/logo.png" alt='Safara Logo' className='w-8 h-8'/>
         <span className="text-2xl font-semibold text-[#222]">Safara</span>
       </div>
 
