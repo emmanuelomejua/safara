@@ -1,14 +1,20 @@
-import Navbar from "./components/Navbar"
-import Home from "./pages/Home"
+import { ClerkProvider } from "@clerk/clerk-react"
+import Routes from "./routes/Routes"
+
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error('Missing Publishable Key')
+}
 
 
 function App() {
-
-
   return (
-    <main className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
-      <Navbar/>
-      <Home/>
+    <main>
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+        <Routes/>
+      </ClerkProvider>
     </main>
   )
 }
