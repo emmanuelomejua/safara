@@ -19,22 +19,22 @@ const router = createBrowserRouter([
     path: '/',
     element: <AppLayout/>,
     children: [
-    {
-    path: '/',
-    element: <Home/>
-    },
-    {
-    path: '/posts',
-    element: <PostList/>
-    },
-    {
-      path: '/posts/:slug',
-      element: <SinglePost/>
-    },
-    {
-      path: '/write',
-      element: <Write/>
-    },
+      {
+      path: '/',
+      element: <Home/>
+      },
+      {
+      path: '/posts',
+      element: <PostList/>
+      },
+      {
+        path: '/posts/:slug',
+        element: <SinglePost/>
+      },
+      {
+        path: '/write',
+        element: <Write/>
+      },
     ]
   },
   {

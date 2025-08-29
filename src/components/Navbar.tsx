@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Image from './ui/Image';
+import { Link } from 'react-router-dom';
+import { Typography } from './ui/TextField';
 
 const Navbar = () => {
 
@@ -8,15 +10,15 @@ const Navbar = () => {
   return (
     <div className='flex w-full h-15 md:h-20 items-center justify-between'>
       {/* Logo */}
-      <div className="flex items-center gap-2">
+      <Link to='/' className="flex items-center gap-2">
         <Image src="/logo.png" alt='Safara Logo' className='w-8 h-8'/>
-        <span className="text-2xl font-semibold text-[#222]">Safara</span>
-      </div>
+        <Typography label='Safara' className='text-2xl font-semibold text-[#222]'/>
+      </Link>
 
       {/* Mobile Menu */}
       <div className="md:hidden">
         <div className="">
-          <img src={openMenu ? '/x.svg' : '/3-vert.svg'} alt="" className="h-8 w-8 object-cover cursor-pointer" onClick={() => setOpenMenu((prev) => !prev)}/>
+          <Image src={openMenu ? '/x.svg' : '/3-vert.svg'} alt="" className="h-8 w-8 object-cover cursor-pointer" onClick={() => setOpenMenu((prev) => !prev)}/>
         </div>
 
         {openMenu &&
