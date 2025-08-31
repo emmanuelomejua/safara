@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Image from './ui/Image';
 import { Link } from 'react-router-dom';
-import { Typography } from './ui/TextField';
+import { Typography } from './ui/Typography';
 
 const Navbar = () => {
 
