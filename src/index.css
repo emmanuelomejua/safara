@@ -1,7 +1,8 @@
 @import "tailwindcss";
+@import url('/src/font.css');
 
 
 body{
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: 'Satoshi', Helvetica, Arial, sans-serif;
     background-color: #e6e6ff;
 }

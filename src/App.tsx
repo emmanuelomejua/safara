@@ -1,5 +1,6 @@
 import { ClerkProvider } from "@clerk/clerk-react"
 import Routes from "./routes/Routes"
+import './font.css'
 
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -11,7 +12,7 @@ if (!PUBLISHABLE_KEY) {
 
 function App() {
   return (
-    <main>
+    <main style={{ fontFamily: 'Satoshi' }}>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <Routes/>
       </ClerkProvider>
