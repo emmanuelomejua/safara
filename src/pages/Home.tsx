@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import MainCategories from "../sections/MainCategories";
+import FearturedPost from "../features/FearturedPost";
 
 
 const Home = () => {
@@ -63,6 +64,8 @@ const Home = () => {
       </div>
 
       <MainCategories/>
+
+      <FearturedPost/>
     </main>
   )
 }
