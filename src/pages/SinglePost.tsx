@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import Image from "../components/ui/Image";
+import PostMenuAction from "../features/PostMenuAction";
+import Search from "../components/Search";
+import Comments from "../sections/Comments";
 
 
 const SinglePost = () => {
@@ -157,17 +160,13 @@ const SinglePost = () => {
 
          {/* menu */}
         <div className="px-4 h-max sticky top-8">
-           <h1 className="mb-4 text-sm font-medium">Author</h1>
+           <h1 className="mb-4 text-sm font-medium text-center">Author</h1>
 
-            <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-8">
-                <Image
-                  src='/postimg.jpeg'
-                  alt=""
-                  className="w-12 h-12 rounded-full object-cover"
-                />
+            <div className="flex flex-col gap-1">
+            <div className="flex flex-col items-center gap-2">
+              <img src="/userImg.jpeg" alt="" className="rounded-full object-cover h-16 w-16" />
               
-              <span className="text-blue-800">Emmanuel Nwachi</span>
+              <span className="text-blue-800 text-[12px]">Emmanuel Nwachi</span>
             </div>
             <p className="text-sm text-gray-500">
               Lorem ipsum dolor sit amet consectetur
@@ -182,9 +181,37 @@ const SinglePost = () => {
             </div>
           </div>
 
+          <PostMenuAction/>
 
+          <h1 className="mt-8 mb-4 text-sm font-medium">Categories</h1>
+          <div className="flex flex-col gap-2 text-sm">
+            <h1 className="underline">All</h1>
+            <Link className="underline" to="/">
+              Web Design
+            </Link>
+            <Link className="underline" to="/">
+              Development
+            </Link>
+            <Link className="underline" to="/">
+              Databases
+            </Link>
+            <Link className="underline" to="/">
+              Search Engines
+            </Link>
+            <Link className="underline" to="/">
+              Marketing
+            </Link>
+          </div>
+
+
+           <h1 className="mt-8 mb-4 text-sm font-medium">Search</h1>
+
+           <Search/>
         </div>
        </div>
+
+      <Comments/>
+
     </div>
   )
 }
