@@ -7,7 +7,7 @@ const PostListItem = () => {
 
         {/* image */}
        <div className="md:hidden xl:block xl:w-1/3">
-            <Image src='/featured1.jpeg' alt='' className="rounded-2xl object-cover" w={735} />
+          <Image src='/featured1.jpeg' alt='' className="rounded-2xl object-cover" w={735} />
        </div>
 
         {/* details */}

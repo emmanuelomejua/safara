@@ -23,6 +23,7 @@ const ImageKit:FC<imagekitProps> = ({src, w, h, className, loading='lazy', q=20}
             loading={loading}
             quality={q}
             className={className}
+            transformation={[{width: w, height: h}]}
         />
     </div>
   )

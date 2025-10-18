@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Image from './ui/Image';
 import { Link } from 'react-router-dom';
 import { Typography } from './ui/Typography';
+import { Button } from './ui/Button';
 
 const Navbar = () => {
 
@@ -29,7 +30,8 @@ const Navbar = () => {
             <span className="">About</span>
 
             <div className="">
-              <button className="px-5 py-2 text-white bg-blue-700 rounded-3xl cursor-pointer">Login</button>
+               <Button className='cursor-pointer'>Login</Button>
+              {/* <button className="px-5 py-2 text-white bg-blue-700 rounded-3xl cursor-pointer">Login</button> */}
             </div>
         </div>}
       </div>
@@ -43,7 +45,7 @@ const Navbar = () => {
           <span className="">About</span>
 
           <div className="">
-            <button className="px-5 py-2 text-white bg-blue-700 rounded-3xl cursor-pointer">Login</button>
+            <Button className='cursor-pointer'>Login</Button>
           </div>
         </div>
       </div> 
