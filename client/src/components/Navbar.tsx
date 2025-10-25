@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import Image from './ui/Image';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Typography } from './ui/Typography';
 import { Button } from './ui/Button';
+import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 
 const Navbar = () => {
 
   const [openMenu, setOpenMenu] = useState(false);
+
+  const navigate = useNavigate();
 
   return (
     <div className='flex w-full h-15 md:h-20 items-center justify-between'>
@@ -29,24 +32,30 @@ const Navbar = () => {
             <span className="">Most Popular</span>
             <span className="">About</span>
 
-            <div className="">
-               <Button className='cursor-pointer'>Login</Button>
-              {/* <button className="px-5 py-2 text-white bg-blue-700 rounded-3xl cursor-pointer">Login</button> */}
-            </div>
+            <Link to='/sign-in' className="">
+               <Button className='cursor-pointer'>Login 👋</Button>
+            </Link>
         </div>}
       </div>
 
       {/* Desktop Menu */}
       <div className="hidden md:flex items-center">
         <div className="flex items-center  gap-5 xl:gap-8 font-medium">
-          <span className="">Home</span>
-          <span className="">Trending</span>
-          <span className="">Most Popular</span>
-          <span className="">About</span>
+            <Link to="/">Home</Link>
+            <Link to="/posts?sort=trending">Trending</Link>
+            <Link to="/posts?sort=popular">Most Popular</Link>
+            <Link to="/">About</Link>
 
-          <div className="">
-            <Button className='cursor-pointer'>Login</Button>
-          </div>
+            <SignedOut>
+              <Link to="/sign-in">
+                <Button className="py-2 px-4 rounded-3xl bg-blue-800 text-white">
+                  Login 👋
+                </Button>
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
         </div>
       </div> 
     </div>

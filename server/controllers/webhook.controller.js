@@ -20,11 +20,15 @@ export const clerkWebHook = async (req, res) => {
     try {
 
         evt = wh.verify(payload, headers);
+
+        console.log(evt);
     } catch (error) {
         res.status(400).json({
             message: 'Webhook verification failed!'
         })
     }
+
+    console.log(evt.data)
 
     if (evt.type === "user.created") {
     const newUser = new User({

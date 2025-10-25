@@ -1,5 +1,6 @@
 import { ClerkProvider } from "@clerk/clerk-react"
-import Routes from "./routes/Routes"
+import Routes from "./routes/Routes";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './font.css'
 
 
@@ -9,13 +10,17 @@ if (!PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key')
 }
 
-
 function App() {
+
+  const queryCleint = new QueryClient();
+
   return (
     <main style={{ fontFamily: 'Satoshi' }}>
+      <QueryClientProvider client={queryCleint}>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <Routes/>
       </ClerkProvider>
+      </QueryClientProvider>
     </main>
   )
 }
