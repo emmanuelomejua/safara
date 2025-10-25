@@ -2,9 +2,15 @@ import { Link } from "react-router-dom";
 import MainCategories from "../sections/MainCategories";
 import FearturedPost from "../features/FearturedPost";
 import PostList from "../features/PostList";
+import { useAuth } from "@clerk/clerk-react";
 
 
 const Home = () => {
+
+  const auth = useAuth();
+
+  console.log(auth.getToken)
+
   return (
     <main className="mt-4 flex flex-col gap-4">
        <div className="flex gap-4">
