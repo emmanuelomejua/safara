@@ -37,7 +37,6 @@ const Home = () => {
             width="200"
             height="200"
             className="text-lg tracking-widest animate-spin animatedButton"
-            // className="text-lg tracking-widest"
           >
             <path
               id="circlePath"
