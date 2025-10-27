@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import SERVER from "./SERVER";
 import { useGetToken } from "./getToken";
+import { useNavigate } from "react-router-dom";
 
 interface PostData {
   title: string;
@@ -11,21 +12,25 @@ interface PostData {
 
 
 export const useCreatePost = () => {
-    const token = useGetToken();
-    console.log(token)
+   
+    const { token, refreshToken } = useGetToken();
+    const navigate = useNavigate();
+
     const mutatation = useMutation({
         mutationFn: async (data: PostData) => {
+            const newToken = token || (await refreshToken());
+
             const res = await SERVER.post('posts/create', data, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${newToken}`
                 }
             });
             return res.data;
         },
-        onSuccess: () => {
-            console.log('Successful!!')
+        onSuccess: (data) => {
+            navigate(`/posts/${data.slug}`)
         },
-        onError(error, variables, onMutateResult, context) {
+        onError(error) {
             console.log(error)
         },
     });

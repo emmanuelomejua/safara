@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Image from './ui/Image';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Typography } from './ui/Typography';
 import { Button } from './ui/Button';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
@@ -9,7 +9,6 @@ const Navbar = () => {
 
   const [openMenu, setOpenMenu] = useState(false);
 
-  const navigate = useNavigate();
 
   return (
     <div className='flex w-full h-15 md:h-20 items-center justify-between'>

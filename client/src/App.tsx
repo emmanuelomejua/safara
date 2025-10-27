@@ -1,7 +1,9 @@
 import { ClerkProvider } from "@clerk/clerk-react"
 import Routes from "./routes/Routes";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import './font.css'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import './font.css';
 
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -19,6 +21,7 @@ function App() {
       <QueryClientProvider client={queryCleint}>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <Routes/>
+        <ToastContainer/>
       </ClerkProvider>
       </QueryClientProvider>
     </main>
