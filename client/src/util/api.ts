@@ -2,6 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import SERVER from "./SERVER";
 import { useGetToken } from "./getToken";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { toastOptions } from "../helpers/toastOptions";
 
 interface PostData {
   title: string;
@@ -28,10 +30,11 @@ export const useCreatePost = () => {
             return res.data;
         },
         onSuccess: (data) => {
+            toast.success('Post created successfully!', { ...toastOptions })
             navigate(`/posts/${data.slug}`)
         },
         onError(error) {
-            console.log(error)
+            toast.error(`${error.message}`, { ...toastOptions })
         },
     });
     return mutatation;
