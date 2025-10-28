@@ -2,9 +2,10 @@ import { Button } from "../components/ui/Button";
 import TextField from "../components/ui/TextField";
 import "react-quill-new/dist/quill.snow.css";
 import ReactQuill from "react-quill-new";
-import { useUser } from "@clerk/clerk-react";
 import { useCreatePost } from "../util/api";
 import { useState, type FormEvent } from "react";
+import { toast } from "react-toastify";
+import { toastOptions } from "../helpers/toastOptions";
 
 
 
@@ -24,6 +25,11 @@ const Write = () => {
     const title = formData.get('title') as string;
     const desc = formData.get('desc') as string;
     const category = formData.get("category") as string;
+
+    if (!title || !desc || !category || !val) {
+    toast('Please fill in all fields', { ...toastOptions })
+    return;
+  }
 
     mutation.mutate({title, desc, category, content: val})
   }
@@ -63,6 +69,11 @@ const Write = () => {
           placeholder="A Short Description"
         />
 
+        <div className="flex gap-4">
+          <div className="">🌆</div>
+          <div className="">▶️</div>
+        </div>
+
         <ReactQuill 
           theme="snow" 
           className="flex-1 rounded-xl mb-8 bg-white"
@@ -70,9 +81,11 @@ const Write = () => {
           onChange={setVal}
           />
 
-
-          <Button className="bg-blue-800 text-white cursor-pointer font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-400 disabled:cursor-not-allowed">Send</Button>
-
+        <Button 
+          loading={mutation.isPending}
+          className="bg-blue-800 text-white cursor-pointer font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-400 disabled:cursor-not-allowed">
+            Send
+          </Button>
       </form>
     </div>
   )

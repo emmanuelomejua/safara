@@ -13,11 +13,10 @@ const PostList = () => {
 
   const { data, error, isPending } = useQuery({
     queryKey: ['posts'],
-    queryFn: () => getPosts()
-    ,
+    queryFn: () => getPosts(),
   })
 
-  console.log(data)
+  // console.log(data)
 
   return (
     <div className='flex flex-col mb-8 gap-12'>
