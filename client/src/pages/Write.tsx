@@ -7,6 +7,7 @@ import { useState, type FormEvent } from "react";
 import { toast } from "react-toastify";
 import { toastOptions } from "../helpers/toastOptions";
 import Select from "../components/ui/Select";
+import Upload from "../helpers/Upload";
 
 const options = [
   {label: 'General', value: 'general'},
@@ -43,7 +44,9 @@ const API_URL = import.meta.env.VITE_API_URL
 
 const Write = () => {
 
-  const [val, setVal] = useState('')
+  const [val, setVal] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [cover, setCover] = useState('')
 
   const mutation = useCreatePost();
 
@@ -72,7 +75,9 @@ const Write = () => {
       <h1 className="text-cl font-light">Create a New Post</h1>
 
       <form className="flex flex-col gap-6 flex-1 mb-6" onSubmit={handleSubmit}>
-        <Button className="cursor-pointer">Add a cover photo</Button>
+         <Upload type="image" setProgress={setProgress} setData={setCover}>
+            <Button className="cursor-pointer">Add a cover photo</Button>
+         </Upload>
 
         <TextField name="title" containerClassName='bg-white' className="text-4xl font-semibold bg-transparent outline-none" placeholder="Write a story" />
 
