@@ -6,12 +6,47 @@ import { useCreatePost } from "../util/api";
 import { useState, type FormEvent } from "react";
 import { toast } from "react-toastify";
 import { toastOptions } from "../helpers/toastOptions";
+import Select from "../components/ui/Select";
+import Upload from "../helpers/Upload";
 
+const options = [
+  {label: 'General', value: 'general'},
+  {label: 'Web Design', value: 'web-design'},
+  {label: 'Development', value: 'development'},
+  {label: 'Search Engines', value: 'seo'},
+  {label: 'Marketing', value: 'marketing'},
+  {label: 'Databases', value: 'databases'},
+]
+
+const API_URL = import.meta.env.VITE_API_URL
+
+ const authenticator = async () => {
+        try {
+            // Perform the request to the upload authentication endpoint.
+            const response = await fetch(`${API_URL}posts/upload-auth`);
+            if (!response.ok) {
+                // If the server response is not successful, extract the error text for debugging.
+                const errorText = await response.text();
+                throw new Error(`Request failed with status ${response.status}: ${errorText}`);
+            }
+
+            // Parse and destructure the response JSON for upload credentials.
+            const data = await response.json();
+            const { signature, expire, token, publicKey } = data;
+            return { signature, expire, token, publicKey };
+        } catch (error) {
+            // Log the original error for debugging before rethrowing a new error.
+            console.error("Authentication error:", error);
+            throw new Error("Authentication request failed");
+        }
+    };
 
 
 const Write = () => {
 
-  const [val, setVal] = useState('')
+  const [val, setVal] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [cover, setCover] = useState('')
 
   const mutation = useCreatePost();
 
@@ -40,7 +75,9 @@ const Write = () => {
       <h1 className="text-cl font-light">Create a New Post</h1>
 
       <form className="flex flex-col gap-6 flex-1 mb-6" onSubmit={handleSubmit}>
-        <Button className="cursor-pointer">Add a cover photo</Button>
+         <Upload type="image" setProgress={setProgress} setData={setCover}>
+            <Button className="cursor-pointer">Add a cover photo</Button>
+         </Upload>
 
         <TextField name="title" containerClassName='bg-white' className="text-4xl font-semibold bg-transparent outline-none" placeholder="Write a story" />
 
@@ -49,18 +86,11 @@ const Write = () => {
             Choose a category:
           </label>
 
-          <select
+          <Select 
+            options={options} 
             name="category"
             id=""
-            className="p-2 rounded-xl bg-white shadow-md"
-          >
-            <option value="general">General</option>
-            <option value="web-design">Web Design</option>
-            <option value="development">Development</option>
-            <option value="databases">Databases</option>
-            <option value="seo">Search Engines</option>
-            <option value="marketing">Marketing</option>
-          </select>
+            className="p-2 rounded-xl bg-white shadow-md"/>
         </div>
 
         <textarea
