@@ -9,12 +9,11 @@ interface uploadType {
     setData: any;
 }
 
+const API_URL = import.meta.env.VITE_API_URL
 
 const authenticator = async () => {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/posts/upload-auth`
-    );
+   const response = await fetch(`${API_URL}posts/upload-auth`);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -38,7 +37,7 @@ const Upload = ({ children, type, setProgress, setData }: uploadType) => {
     console.log(err);
     toast.error("Image upload failed!");
   };
-  const onSuccess = (res: {}) => {
+  const onSuccess = (res: any) => {
     console.log(res);
     setData(res);
   };
