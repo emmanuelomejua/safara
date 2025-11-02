@@ -94,13 +94,15 @@ export const deletePost = async (req, res) => {
 }
 
 
-const imagekit = new ImageKit({
-    urlEndpoint: process.env.IMAGEKIT_urlEndPoint,
-    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
-    privateKey: process.env.IMAGEKIT_PRIVATE_KEY
-})
 
-export const uploadAuth = () => {
+export const uploadAuth = (req, res) => {
+
+    const imagekit = new ImageKit({
+        urlEndpoint: process.env.IMAGEKIT_urlEndPoint,
+        publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+        privateKey: process.env.IMAGEKIT_PRIVATE_KEY
+    })
+
     const result = imagekit.getAuthenticationParameters();
 
     res.send(result);

@@ -9,6 +9,7 @@ import { toastOptions } from "../helpers/toastOptions";
 import Select from "../components/ui/Select";
 import Upload from "../helpers/Upload";
 
+
 const options = [
   {label: 'General', value: 'general'},
   {label: 'Web Design', value: 'web-design'},
@@ -18,35 +19,15 @@ const options = [
   {label: 'Databases', value: 'databases'},
 ]
 
-const API_URL = import.meta.env.VITE_API_URL
-
- const authenticator = async () => {
-        try {
-            // Perform the request to the upload authentication endpoint.
-            const response = await fetch(`${API_URL}posts/upload-auth`);
-            if (!response.ok) {
-                // If the server response is not successful, extract the error text for debugging.
-                const errorText = await response.text();
-                throw new Error(`Request failed with status ${response.status}: ${errorText}`);
-            }
-
-            // Parse and destructure the response JSON for upload credentials.
-            const data = await response.json();
-            const { signature, expire, token, publicKey } = data;
-            return { signature, expire, token, publicKey };
-        } catch (error) {
-            // Log the original error for debugging before rethrowing a new error.
-            console.error("Authentication error:", error);
-            throw new Error("Authentication request failed");
-        }
-    };
 
 
 const Write = () => {
 
   const [val, setVal] = useState('');
   const [progress, setProgress] = useState(0);
-  const [cover, setCover] = useState('')
+  const [cover, setCover] = useState('');
+  const [img, setImg] = useState("");
+  const [video, setVideo] = useState("");
 
   const mutation = useCreatePost();
 
@@ -61,12 +42,11 @@ const Write = () => {
     const desc = formData.get('desc') as string;
     const category = formData.get("category") as string;
 
-    if (!title || !desc || !category || !val) {
+    if (!title || !desc || !category || !val || !cover) {
     toast('Please fill in all fields', { ...toastOptions })
     return;
   }
-
-    mutation.mutate({title, desc, category, content: val})
+    mutation.mutate({title, desc, category, content: val, cover})
   }
 
 
@@ -100,8 +80,12 @@ const Write = () => {
         />
 
         <div className="flex gap-4">
-          <div className="">🌆</div>
-          <div className="">▶️</div>
+            <Upload type="image" setProgress={setProgress} setData={setImg}>
+              🌆
+            </Upload>
+            <Upload type="video" setProgress={setProgress} setData={setVideo}>
+              ▶️
+            </Upload>
         </div>
 
         <ReactQuill 
@@ -112,10 +96,11 @@ const Write = () => {
           />
 
         <Button 
-          loading={mutation.isPending}
+          loading={mutation.isPending || (0 < progress && progress < 100)}
           className="bg-blue-800 text-white cursor-pointer font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-400 disabled:cursor-not-allowed">
-            Send
+          {mutation.isPending ? "Loading..." : "Send"}
           </Button>
+           {"Progress:" + progress}
       </form>
     </div>
   )

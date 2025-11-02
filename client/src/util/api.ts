@@ -10,6 +10,7 @@ interface PostData {
   desc: string;
   category: string;
   content: string;
+  cover: string
 }
 
 
