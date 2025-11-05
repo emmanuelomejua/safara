@@ -46,11 +46,21 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
 
-    const posts = await Post.find();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 2;
 
-    if(!posts) return res.status(502).json('No created post!');
+    const posts = await Post.find()
+                        .limit(limit)
+                        .skip((page - 1) * limit)
+
+    const totalPosts = await Post.countDocuments();
+    const hasMore = (page * limit) < totalPosts;
+
+    if (!posts || posts.length === 0) {
+      return res.status(404).json({ message: 'No posts found' });
+    }
     
-    res.status(200).json(posts)
+    res.status(200).json({ posts, totalPosts, hasMore, currentPage: page })
 
 }
 

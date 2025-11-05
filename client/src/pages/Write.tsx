@@ -3,11 +3,13 @@ import TextField from "../components/ui/TextField";
 import "react-quill-new/dist/quill.snow.css";
 import ReactQuill from "react-quill-new";
 import { useCreatePost } from "../util/api";
-import { useState, type FormEvent } from "react";
+import { useReducer, type FormEvent } from "react";
 import { toast } from "react-toastify";
 import { toastOptions } from "../helpers/toastOptions";
 import Select from "../components/ui/Select";
 import Upload from "../helpers/Upload";
+import type { State } from "../type";
+import postReducer from "../util/postReducer";
 
 
 const options = [
@@ -19,17 +21,20 @@ const options = [
   {label: 'Databases', value: 'databases'},
 ]
 
-
+const initialState: State = {
+  val: "",
+  progress: 0,
+  cover: "",
+  img: "",
+  video: "",
+};
 
 const Write = () => {
 
-  const [val, setVal] = useState('');
-  const [progress, setProgress] = useState(0);
-  const [cover, setCover] = useState('');
-  const [img, setImg] = useState("");
-  const [video, setVideo] = useState("");
 
+  const [state, dispatch] = useReducer(postReducer, initialState);
   const mutation = useCreatePost();
+
 
   const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,11 +47,11 @@ const Write = () => {
     const desc = formData.get('desc') as string;
     const category = formData.get("category") as string;
 
-    if (!title || !desc || !category || !val || !cover) {
+    if (!title || !desc || !category || !state.val ) {
     toast('Please fill in all fields', { ...toastOptions })
     return;
   }
-    mutation.mutate({title, desc, category, content: val, cover})
+    mutation.mutate({title, desc, category, content: state.val, img: state.cover.filePath })
   }
 
 
@@ -55,7 +60,10 @@ const Write = () => {
       <h1 className="text-cl font-light">Create a New Post</h1>
 
       <form className="flex flex-col gap-6 flex-1 mb-6" onSubmit={handleSubmit}>
-         <Upload type="image" setProgress={setProgress} setData={setCover}>
+         <Upload type="image" 
+         setProgress={(p: number) => dispatch({ type: "SET_PROGRESS", payload: p })}
+          setData={(data: any) => dispatch({ type: "SET_COVER", payload: data })}
+          >
             <Button className="cursor-pointer">Add a cover photo</Button>
          </Upload>
 
@@ -80,10 +88,18 @@ const Write = () => {
         />
 
         <div className="flex gap-4">
-            <Upload type="image" setProgress={setProgress} setData={setImg}>
+            <Upload 
+              type="image" 
+              setProgress={(p: number) => dispatch({ type: "SET_PROGRESS", payload: p })}
+            setData={(data: any) => dispatch({ type: "SET_IMG", payload: data })}
+              >
               🌆
             </Upload>
-            <Upload type="video" setProgress={setProgress} setData={setVideo}>
+            <Upload 
+              type="video" 
+              setProgress={(p: number) => dispatch({ type: "SET_PROGRESS", payload: p })}
+              setData={(data: any) => dispatch({ type: "SET_VIDEO", payload: data })}
+              >
               ▶️
             </Upload>
         </div>
@@ -91,16 +107,16 @@ const Write = () => {
         <ReactQuill 
           theme="snow" 
           className="flex-1 rounded-xl mb-8 bg-white"
-          value={val}
-          onChange={setVal}
+          value={state.val}
+          onChange={(value) => dispatch({ type: "SET_VAL", payload: value })}
           />
 
         <Button 
-          loading={mutation.isPending || (0 < progress && progress < 100)}
+          loading={mutation.isPending || (0 < state.progress && state.progress < 100)}
           className="bg-blue-800 text-white cursor-pointer font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-400 disabled:cursor-not-allowed">
           {mutation.isPending ? "Loading..." : "Send"}
           </Button>
-           {"Progress:" + progress}
+           {"Progress:" + state.progress}
       </form>
     </div>
   )
