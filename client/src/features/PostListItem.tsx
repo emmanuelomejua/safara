@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import Image from '../components/ui/Image';
 
-const PostListItem = () => {
+const PostListItem = ({post}: any) => {
+  
   return (
     <div className='flex flex-col xl:flex-row gap-8 mb-12'>
 
@@ -13,7 +14,7 @@ const PostListItem = () => {
         {/* details */}
        <div className="flex flex-col gap-4 xl:w-2/3">
           <Link to='/posts/:slug' className='text-4xl font-semibold'>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
+            {post?.title}
           </Link>
 
         <div className="flex items-center gap-2 text-gray-400 text-sm">
