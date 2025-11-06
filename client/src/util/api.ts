@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import SERVER from "./SERVER";
 import { useGetToken } from "./getToken";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ interface PostData {
   img?: any;
 }
 
-
+// Posts
 export const useCreatePost = () => {
    
     const { token, refreshToken } = useGetToken();
@@ -58,6 +58,7 @@ export const useGetSinglePost = (slug: string ) => {
 }
 
 
+//comments
 export const useGetComments = (postId: string) => {
 
     const getComments = async (id: string) => {
@@ -72,3 +73,32 @@ export const useGetComments = (postId: string) => {
 
     return { data, isPending, error }
 }
+
+
+export const useAddCommentMutation = (id: string) => {
+   
+    const { token, refreshToken } = useGetToken();
+    const queryClient = useQueryClient()
+
+    const mutatation = useMutation({
+        mutationFn: async (data: string) => {
+            const newToken = token || (await refreshToken());
+
+            const res = await SERVER.post(`comments/${id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${newToken}`
+                }
+            });
+            return res.data;
+        },
+        onSuccess: () => {
+            toast.success('Comment added successfully!', { ...toastOptions })
+            queryClient.invalidateQueries({ queryKey: ['comments', id] })
+        },
+        onError(error) {
+            toast.error(`${error.message}`, { ...toastOptions })
+        },
+    });
+    return mutatation;
+}
+

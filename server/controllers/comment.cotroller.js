@@ -26,7 +26,11 @@ export const getPostComments = async (req, res) => {
     const comment = await Comments
                     .findOne({ post: req.params.postId })
                     .populate('user', 'username img')
-                    .sort({ createdAt: -1 })
+                    .sort({ createdAt: -1 });
+
+    if(!comment || comment.length === 0){
+        return res.status(404).json('No Comment found!')
+    }
 
     res.status(200).json(comment);
 }
@@ -40,6 +44,10 @@ export const deleteComment = async (req, res) => {
 
     const user = await userModel.findOne({ clerkUserId });
 
-    const deletedComment = await Comments.findOneAndDelete({ _id: id, user: user._id })
+    const del = await Comments.findOneAndDelete({ _id: id, user: user._id });
+
+    if(!del) return res.status(403).json({message: 'Unathorized action'})
+
+    res.status(200).json('Comment has been deleted!')
 
 }

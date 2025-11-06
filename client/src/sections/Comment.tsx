@@ -1,7 +1,7 @@
 import { Typography } from "../components/ui/Typography";
 
 
-const Comment = () => {
+const Comment = ({comment}: any) => {
   return (
     <div className='p-4 bg-slate-50 rounded-xl mb-8'>
         <div className="flex items-center gap-4">
