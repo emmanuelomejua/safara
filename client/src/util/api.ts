@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import SERVER from "./SERVER";
 import { useGetToken } from "./getToken";
 import { useNavigate } from "react-router-dom";
@@ -39,4 +39,20 @@ export const useCreatePost = () => {
         },
     });
     return mutatation;
+}
+
+
+export const useGetSinglePost = (slug: string ) => {
+
+    const getPost = async (slug: string) => {
+        const res = await SERVER.get(`posts/${slug}`);
+        return res.data;
+    }
+
+    const { data, isPending, error } = useQuery({
+        queryKey: ['post', slug],
+        queryFn: () =>  getPost(slug)
+    });
+
+    return { data, isPending, error }
 }

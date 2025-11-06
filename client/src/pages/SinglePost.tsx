@@ -1,11 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Image from "../components/ui/Image";
 import PostMenuAction from "../features/PostMenuAction";
 import Search from "../components/Search";
 import Comments from "../sections/Comments";
+import { useGetSinglePost } from "../util/api";
 
 
 const SinglePost = () => {
+
+  const { slug } = useParams<{ slug: string }>();
+
+  const { data, error, isPending } = useGetSinglePost(slug!);
+
+  if (isPending) return <p>Loading...</p>;
+  if (error) return <p>Error loading post.</p>;
+
   return (
     <div className='flex flex-col gap-8'>
             {/* detail */}
