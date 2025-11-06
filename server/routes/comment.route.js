@@ -1,8 +1,12 @@
 import express from 'express';
-import { clerkWebHook } from '../controllers/webhook.controller.js';
+import { addComment, deleteComment, getPostComments } from '../controllers/comment.cotroller.js';
 
 const router = express.Router();
 
-router.post('/clerk', clerkWebHook)
+router.post('/:postId', addComment);
+
+router.get('/:postId', getPostComments);
+
+router.delete('/:id', deleteComment)
 
 export default router;

@@ -48,7 +48,7 @@ const Write = () => {
     const category = formData.get("category") as string;
 
     if (!title || !desc || !category || !state.val ) {
-    toast('Please fill in all fields', { ...toastOptions })
+    toast.warn('Please fill in all fields', { ...toastOptions })
     return;
   }
     mutation.mutate({title, desc, category, content: state.val, img: state.cover.filePath })
