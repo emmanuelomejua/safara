@@ -56,3 +56,19 @@ export const useGetSinglePost = (slug: string ) => {
 
     return { data, isPending, error }
 }
+
+
+export const useGetComments = (postId: string) => {
+
+    const getComments = async (id: string) => {
+        const res = await SERVER.get(`comments/${id}`);
+        return res.data;
+    }
+
+    const { data, error, isPending } = useQuery({
+        queryKey: ['comments', postId],
+        queryFn: () => getComments(postId),
+    })
+
+    return { data, isPending, error }
+}

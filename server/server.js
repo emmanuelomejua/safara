@@ -32,7 +32,7 @@ app.use(function (req, res, next) {
 
 
 app.use('/api/posts', postRoute);
-app.use('/api/comment', commentRoute);
+app.use('/api/comments', commentRoute);
 app.use('/api/users', userRoute);
 
 
