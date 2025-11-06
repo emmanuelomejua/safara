@@ -220,7 +220,7 @@ const SinglePost = () => {
         </div>
        </div>
 
-      <Comments/>
+      <Comments postId={data?._id} />
 
     </div>
   )
