@@ -6,12 +6,14 @@ export const addComment = async (req, res) => {
     const clerkUserId = req.auth().userId;
     const postId = req.params.postId;
 
+    const desc = req.body.desc
+
     if(!clerkUserId) return res.status(401).json({ message: 'Not authnticated' });
 
     const user = await userModel.findOne({ clerkUserId });
 
     const comment = new Comments({
-        ...req.boy, 
+        desc, 
         user: user._id, 
         post: postId
     })
@@ -24,7 +26,7 @@ export const addComment = async (req, res) => {
 
 export const getPostComments = async (req, res) => {
     const comment = await Comments
-                    .findOne({ post: req.params.postId })
+                    .find({ post: req.params.postId })
                     .populate('user', 'username img')
                     .sort({ createdAt: -1 });
 
