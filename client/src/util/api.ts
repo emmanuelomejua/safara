@@ -81,11 +81,12 @@ export const useAddCommentMutation = (id: string) => {
     const queryClient = useQueryClient()
 
     const mutatation = useMutation({
-        mutationFn: async (data: string) => {
+        mutationFn: async (data: {desc: string}) => {
             const newToken = token || (await refreshToken());
 
-            const res = await SERVER.post(`comments/${id}`, data, {
+            const res = await SERVER.post(`comments/${id}`, data , {
                 headers: {
+                    "Content-Type": "application/json",
                     Authorization: `Bearer ${newToken}`
                 }
             });

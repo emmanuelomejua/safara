@@ -2,12 +2,13 @@ import type { FormEvent } from "react";
 import { Button } from "../components/ui/Button";
 import { useAddCommentMutation, useGetComments } from "../util/api";
 import Comment from "./Comment";
+import { toast } from "react-toastify";
 
 
 
 const Comments = ({ postId }: { postId: string }) => {
 
-  const { data } = useGetComments(postId);
+  const { data, isPending, error } = useGetComments(postId);
 
   const mutation = useAddCommentMutation(postId)
 
@@ -17,11 +18,15 @@ const Comments = ({ postId }: { postId: string }) => {
 
     const formData = new FormData(form)
 
-    const desc = formData.get('desc') as string
+    const desc = formData.get('desc') as string;
+
+    if (!desc.trim()) return toast.warn("Comment cannot be empty");
 
     mutation.mutate({desc})
 
   }
+
+  if (isPending) return <p>Loading...</p>;
 
   return (
     <div className='flex flex-col gap-8 lg:w-3/5 mb-12'>
@@ -41,7 +46,7 @@ const Comments = ({ postId }: { postId: string }) => {
 
       {
         data?.map((comment: any) => (
-          <Comment key={comment?._id} comment={comment}/>
+          <Comment key={comment?._id} comment={comment} error={error}/>
         ))
       }
     </div>
