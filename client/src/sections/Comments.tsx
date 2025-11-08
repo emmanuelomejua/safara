@@ -2,7 +2,7 @@ import type { FormEvent } from "react";
 import { Button } from "../components/ui/Button";
 import { useAddCommentMutation, useGetComments } from "../util/api";
 import Comment from "./Comment";
-import { toast } from "react-toastify";
+
 
 
 
@@ -19,8 +19,6 @@ const Comments = ({ postId }: { postId: string }) => {
     const formData = new FormData(form)
 
     const desc = formData.get('desc') as string;
-
-    if (!desc.trim()) return toast.warn("Comment cannot be empty");
 
     mutation.mutate({desc})
 
@@ -41,7 +39,9 @@ const Comments = ({ postId }: { postId: string }) => {
           className="w-full p-4 rounded-xl outline-none border-[1px] border-[#0000ff7a]"
         />
 
-        <Button type="submit" className="cursor-pointer">Send</Button>
+        <Button 
+          loading={mutation.isPending}
+          type="submit" className="cursor-pointer">Send</Button>
       </form>
 
       {

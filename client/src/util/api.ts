@@ -103,3 +103,83 @@ export const useAddCommentMutation = (id: string) => {
     return mutatation;
 }
 
+
+export const useGetSavedPost = () => {
+    const { token, refreshToken } = useGetToken();
+
+    const query = useQuery({
+        queryKey: ['savePost'],
+        queryFn: async () => {
+             const newToken = token || (await refreshToken());
+            const res = await SERVER.get('users/saved-posts', {
+                headers: {
+                    Authorization: `Bearer ${newToken}`
+                }
+            })
+            return res.data
+        }
+    })
+
+    return query
+}
+
+
+
+export const useDelPostMutation = (id: string) => {
+
+    const queryClient = useQueryClient()
+   
+    const { token, refreshToken } = useGetToken();
+    const navigate = useNavigate();
+
+    const mutatation = useMutation({
+        mutationFn: async () => {
+            const newToken = token || (await refreshToken());
+
+            const res = await SERVER.delete(`posts/${id}`,  {
+                headers: {
+                    Authorization: `Bearer ${newToken}`
+                }
+            });
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['posts']})
+            toast.success('Post deleted successfully!', { ...toastOptions })
+            navigate('/');
+        },
+        onError(error) {
+            toast.error(`${error.message}`, { ...toastOptions })
+        },
+    });
+    return mutatation;
+}
+
+
+export const useSavePostMutation = () => {
+
+    const queryClient = useQueryClient()
+   
+    const { token, refreshToken } = useGetToken();
+
+    const mutatation = useMutation({
+        mutationFn: async (postId: any) => {
+            const newToken = token || (await refreshToken());
+
+            const res = await SERVER.patch('users/save-post', postId,  {
+                headers: {
+                    Authorization: `Bearer ${newToken}`
+                }
+            });
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['savePost']});
+        },
+        onError(error) {
+            toast.error(`${error.message}`, { ...toastOptions })
+        },
+    });
+    return mutatation;
+}
+
