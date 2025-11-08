@@ -46,7 +46,7 @@ const Comments = ({ postId }: { postId: string }) => {
 
       {
         data?.map((comment: any) => (
-          <Comment key={comment?._id} comment={comment} error={error}/>
+          <Comment key={comment?._id} comment={comment} error={error} postId={postId}/>
         ))
       }
     </div>

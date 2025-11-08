@@ -183,3 +183,32 @@ export const useSavePostMutation = () => {
     return mutatation;
 }
 
+
+export const useDelCommentMutation = (id: string, postId: string) => {
+
+    const queryClient = useQueryClient()
+   
+    const { token, refreshToken } = useGetToken();
+
+    const mutatation = useMutation({
+        mutationFn: async () => {
+            const newToken = token || (await refreshToken());
+
+            const res = await SERVER.delete(`comments/${id}`,  {
+                headers: {
+                    Authorization: `Bearer ${newToken}`
+                }
+            });
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['comments', postId]})
+            toast.success('Comment has been deleted', { ...toastOptions })
+        },
+        onError(error) {
+            console.error(error)
+            toast.error(`${error.message}`, { ...toastOptions })
+        },
+    });
+    return mutatation;
+}

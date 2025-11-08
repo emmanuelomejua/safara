@@ -13,7 +13,6 @@ const PostMenuAction = ({post}: any) => {
   const navigate = useNavigate();
 
   const query = useGetSavedPost();
-  console.log('DATA', query.data)
 
   const isSaved = query?.data?.some((p: number) => p === post._id) || null
 
@@ -23,7 +22,8 @@ const PostMenuAction = ({post}: any) => {
 
   const handleSavePost = () => {
     if(!user){
-      navigate('/login')
+      navigate('/sign-in');
+      return;
     }
     savePostMutation.mutate({postId: post?._id})
   }
@@ -49,7 +49,11 @@ const PostMenuAction = ({post}: any) => {
                   fill={isSaved ? 'black' : 'none'}
                   />
             </svg>
-            <span>Save this Post</span>
+            
+            {savePostMutation.isPending ? 
+            <span className="text-sm">Progress...</span>: 
+            <span className="text-[#000]">Save this Post</span>
+            }
           </>
           }
           </div>
