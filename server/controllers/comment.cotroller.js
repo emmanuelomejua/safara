@@ -42,6 +42,13 @@ export const deleteComment = async (req, res) => {
     const clerkUserId = req.auth().userId;
     const id = req.params.id;
 
+    const role = req.auth().sessionClaims?.metadata?.role || "user";
+
+    if (role === "admin") {
+        await Comments.findByIdAndDelete(req.params.id);
+        return res.status(200).json("Comment has been deleted");
+    }
+
     if(!clerkUserId) return res.status(401).json({ message: 'Not authnticated' });
 
     const user = await userModel.findOne({ clerkUserId });

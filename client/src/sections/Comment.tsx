@@ -1,8 +1,19 @@
+import { useUser } from "@clerk/clerk-react";
 import { Typography } from "../components/ui/Typography";
 import moment from "moment";
+import { useDelCommentMutation } from "../util/api";
 
 
-const Comment = ({comment, error}: any) => {
+const Comment = ({comment, error, postId}: any) => {
+
+  const { user } = useUser();
+  const role = user?.publicMetadata.role;
+
+  const delCommentMutation = useDelCommentMutation(comment?._id, postId)
+
+  const handleDelComment = () => {
+    delCommentMutation.mutate();
+  }
 
   if (error) return <p>Error loading post...</p>;
 
@@ -17,6 +28,12 @@ const Comment = ({comment, error}: any) => {
             <Typography 
               className="text-sm text-blue-800" 
               label={moment(comment.createdAt).fromNow()}/>
+
+           {user && (comment?.user?.username === user?.username || role === 'admin') &&
+            <span 
+              onClick={handleDelComment}
+              className="text-[12px] text-red-500 cursor-pointer flex items-center justify-center">Delete</span>
+            }
         </div>
 
         <div className="mt-4">
