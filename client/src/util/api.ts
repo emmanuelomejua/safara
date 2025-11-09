@@ -212,3 +212,33 @@ export const useDelCommentMutation = (id: string, postId: string) => {
     });
     return mutatation;
 }
+
+
+export const useFeatureMutation = ( postId: string, slug: string ) => {
+    const queryClient = useQueryClient()
+   
+    const { token, refreshToken } = useGetToken();
+
+    const mutatation = useMutation({
+        mutationFn: async () => {
+            const newToken = token || (await refreshToken());
+
+            const res = await SERVER.patch('posts/feature', postId,  {
+                headers: {
+                    Authorization: `Bearer ${newToken}`
+                }
+            });
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['post', slug]})
+            toast.success('Post has been featured', { ...toastOptions })
+        },
+        onError(error) {
+            console.error(error)
+            toast.error(`${error.message}`, { ...toastOptions })
+        },
+    });
+    return mutatation;
+}
+

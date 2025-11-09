@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import { useDelPostMutation, useGetSavedPost, useSavePostMutation } from "../util/api";
+import { useDelPostMutation, useFeatureMutation, useGetSavedPost, useSavePostMutation } from "../util/api";
 import { useNavigate } from "react-router-dom";
 
 
@@ -10,11 +10,13 @@ const PostMenuAction = ({post}: any) => {
   const deletePostMutation = useDelPostMutation(post?._id);
   const savePostMutation = useSavePostMutation();
 
+  const featureMutation = useFeatureMutation(post?._id, post?.slug)
+
   const navigate = useNavigate();
 
   const query = useGetSavedPost();
 
-  const isSaved = query?.data?.some((p: number) => p === post._id) || null
+  const isSaved = query?.data?.some((p: number) => p === post._id) || null;
 
   const handleDelete = () => {
     deletePostMutation.mutate()
@@ -27,6 +29,11 @@ const PostMenuAction = ({post}: any) => {
     }
     savePostMutation.mutate({postId: post?._id})
   }
+
+  const handleFeature = () => {
+    featureMutation.mutate();
+  }
+
 
   return (
     <div className="">
@@ -57,6 +64,38 @@ const PostMenuAction = ({post}: any) => {
           </>
           }
           </div>
+        {user && (post?.user?.username === user?.username) && (
+        <div
+          className="flex items-center gap-2 py-2 text-sm cursor-pointer"
+          onClick={handleFeature}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 48 48"
+            width="20px"
+            height="20px"
+          >
+            <path
+              d="M24 2L29.39 16.26L44 18.18L33 29.24L35.82 44L24 37L12.18 44L15 29.24L4 18.18L18.61 16.26L24 2Z"
+              stroke="black"
+              strokeWidth="2"
+              fill={
+                featureMutation.isPending
+                  ? post.isFeatured
+                    ? "none"
+                    : "black"
+                  : post.isFeatured
+                  ? "black"
+                  : "none"
+              }
+            />
+          </svg>
+          <span>Feature</span>
+          {featureMutation.isPending && (
+            <span className="text-xs">Progress...</span>
+          )} 
+        </div>
+      )}
 
        {user && (post?.user?.username === user?.username) &&
         <div 
