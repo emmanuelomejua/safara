@@ -2,13 +2,18 @@ import PostListItem from './PostListItem';
 import { useInfiniteQuery } from '@tanstack/react-query'; 
 import InfiniteScroll from 'react-infinite-scroll-component'
 import SERVER from '../util/SERVER'
+import { useSearchParams } from 'react-router-dom';
 
 
-const getPosts = async (pageParam: number) => {
+const getPosts = async (pageParam: number, searchParams: URLSearchParams) => {
+
+  const searchParamsObj = Object.fromEntries(searchParams.entries())
+
   const res = await SERVER.get('posts', {
     params: {
       page:  pageParam, 
-      limit: 10 
+      limit: 10,
+      ...searchParamsObj 
     }
   });
   return res.data;
@@ -17,6 +22,8 @@ const getPosts = async (pageParam: number) => {
 
 const PostList = () => {
 
+  const [searchParams] = useSearchParams();
+
   const {
     data,
     fetchNextPage,
@@ -24,8 +31,8 @@ const PostList = () => {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ['posts'],
-    queryFn: ({ pageParam = 1 }) => getPosts(pageParam),
+    queryKey: ['posts', searchParams.toString()],
+    queryFn: ({ pageParam = 1 }) => getPosts(pageParam, searchParams ),
     initialPageParam: 1,
     getNextPageParam: (lastPage, page) => lastPage.hasMore ? page.length + 1 : undefined,
   })

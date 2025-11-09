@@ -223,7 +223,7 @@ export const useFeatureMutation = ( postId: string, slug: string ) => {
         mutationFn: async () => {
             const newToken = token || (await refreshToken());
 
-            const res = await SERVER.patch('posts/feature', postId,  {
+            const res = await SERVER.patch('posts/feature', { postId },  {
                 headers: {
                     Authorization: `Bearer ${newToken}`
                 }
@@ -231,7 +231,7 @@ export const useFeatureMutation = ( postId: string, slug: string ) => {
             return res.data;
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['post', slug]})
+            queryClient.invalidateQueries({queryKey: ['post', { slug }]})
             toast.success('Post has been featured', { ...toastOptions })
         },
         onError(error) {
@@ -240,5 +240,21 @@ export const useFeatureMutation = ( postId: string, slug: string ) => {
         },
     });
     return mutatation;
+}
+
+
+
+export const useGetFeaturedPost = () => {
+    const getPost = async () => {
+    const res = await SERVER.get('posts?featured=true&limit=4&sort=newest');
+    return res.data;
+    }
+
+    const { data, isPending, error } = useQuery({
+        queryKey: ['featured-post'],
+        queryFn: () =>  getPost()
+    });
+
+    return { data, isPending, error }
 }
 
