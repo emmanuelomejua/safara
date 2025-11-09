@@ -1,26 +1,40 @@
 import Image from '../components/ui/Image';
 import { Link } from 'react-router-dom';
+import { useGetFeaturedPost } from '../util/api';
+import moment from 'moment';
 
 const FearturedPost = () => {
+
+  const {data, isPending, error} = useGetFeaturedPost();
+  console.log(data);
+
+  if (isPending) return "loading...";
+  if (error) return "Something went wrong!" + error.message;
+
+  const posts = data.posts;
+  if (!posts || posts.length === 0) {
+    return;
+  }
+
   return (
     <div className='mt-8 flex flex-col lg:flex-row gap-8'>
 
         <div className="w-full lg:w-1/2 flex flex-col gap-4">
-          <Image src='/featured1.jpeg' alt='' className='rounded-3xl object-cover' />
+          <Image src={posts[0].img || '/featured1.jpeg'} alt='' className='rounded-3xl object-cover' />
 
           {/* details */}
           <div className="flex items-center gap-4">
             <h1 className="font-semibold lg:text-lg">01.</h1>
-            <span className="text-blue-800 lg:text-lg">Web Design</span>
-            <span className="text-gray-500">2 days ago</span>
+            <span className="text-blue-800 lg:text-lg">{posts[0]?.category}</span>
+            <span className="text-gray-500">{moment(posts[0].createdAt).fromNow()} . {moment(posts[0].createdAt).format('DD-MMM-YYYY')}</span>
           </div>
 
           {/* title */}
           <Link
-            to='/posts/:slug'
+            to={`/posts/${posts[0].slug}`}
             className="text-xl lg:text-3xl font-semibold lg:font-bold"
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            {posts[0].title}
           </Link>
         </div>
        
